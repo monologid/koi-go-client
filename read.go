@@ -38,7 +38,7 @@ type readSchema struct {
 	As      string                 `json:"as,omitempty"`
 	Fields  []string               `json:"fields,omitempty"`
 	Query   map[string]interface{} `json:"query"`
-	Filters filters                `json:"filters,omitempty"`
+	Filters *filters               `json:"filters,omitempty"`
 }
 
 type filters struct {
@@ -123,6 +123,23 @@ func (c *read) ToJSON() ([]byte, error) {
 		Fields: c.GetField(),
 		Query:  c.GetQuery(),
 	}
+
+	filter := &filters{}
+	if c.GetLimit() > 0 {
+		filter.Limit = c.GetLimit()
+	} else {
+		filter.Limit = 10
+	}
+
+	if c.GetOffset() > 0 {
+		filter.Offset = c.GetOffset()
+	}
+
+	if len(c.GetOrderBy()) > 0 {
+		filter.OrderBy = c.GetOrderBy()
+	}
+
+	jsonSchema.Filters = filter
 
 	return json.Marshal(jsonSchema)
 }

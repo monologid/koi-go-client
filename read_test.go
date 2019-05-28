@@ -7,28 +7,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var data = `{
-  "type": "READ",
-  "schema": "account_profile",
-  "as": "account",
-  "fields": [
-    "email",
-    "phone_no",
-    "description"
-  ],
-  "query": {
-    "email": "john@doe.com"
-  },
-  "filters": {
-    "limit": 20,
-    "offset": 1,
-    "order_by": [
-      { "email": "ASC" },
-      { "description": "DESC" }
-    ]
-  }
-}`
-
 func TestShouldReturnCorrectSchemaForRead(t *testing.T) {
 	read := koiclient.NewRead()
 	read.SetSchema("sample_schema")
@@ -99,5 +77,64 @@ func TestShouldReturnCorrectJSONSchemaForRead(t *testing.T) {
 
 	data, err := read.ToJSON()
 	assert.NoError(t, err)
-	assert.Equal(t, "{\"type\":\"READ\",\"schema\":\"sample_schema\",\"as\":\"sample_schema\",\"fields\":[\"name\",\"age\"],\"query\":{\"_id\":\"12345\"},\"filters\":{}}", string(data))
+	assert.Equal(t, "{\"type\":\"READ\",\"schema\":\"sample_schema\",\"as\":\"sample_schema\",\"fields\":[\"name\",\"age\"],\"query\":{\"_id\":\"12345\"},\"filters\":{\"limit\":10}}", string(data))
+}
+
+func TestShouldReturnCorrectJSONSchemaWithFilterLimitForRead(t *testing.T) {
+	read := koiclient.NewRead()
+	read.SetSchema("sample_schema")
+	read.SetAs("sample_schema")
+
+	fields := []string{"name", "age"}
+	read.SetField(fields)
+
+	dummyQuery := make(map[string]interface{})
+	dummyQuery["_id"] = "12345"
+	read.SetQuery(dummyQuery)
+	read.SetLimit(5)
+
+	data, err := read.ToJSON()
+	assert.NoError(t, err)
+	assert.Equal(t, "{\"type\":\"READ\",\"schema\":\"sample_schema\",\"as\":\"sample_schema\",\"fields\":[\"name\",\"age\"],\"query\":{\"_id\":\"12345\"},\"filters\":{\"limit\":5}}", string(data))
+}
+
+func TestShouldReturnCorrectJSONSchemaWithFilterOffsetForRead(t *testing.T) {
+	read := koiclient.NewRead()
+	read.SetSchema("sample_schema")
+	read.SetAs("sample_schema")
+
+	fields := []string{"name", "age"}
+	read.SetField(fields)
+
+	dummyQuery := make(map[string]interface{})
+	dummyQuery["_id"] = "12345"
+	read.SetQuery(dummyQuery)
+	read.SetLimit(5)
+	read.SetOffset(2)
+
+	data, err := read.ToJSON()
+	assert.NoError(t, err)
+	assert.Equal(t, "{\"type\":\"READ\",\"schema\":\"sample_schema\",\"as\":\"sample_schema\",\"fields\":[\"name\",\"age\"],\"query\":{\"_id\":\"12345\"},\"filters\":{\"limit\":5,\"offset\":2}}", string(data))
+}
+
+func TestShouldReturnCorrectJSONSchemaWithFilterOrderByForRead(t *testing.T) {
+	read := koiclient.NewRead()
+	read.SetSchema("sample_schema")
+	read.SetAs("sample_schema")
+
+	fields := []string{"name", "age"}
+	read.SetField(fields)
+
+	dummyQuery := make(map[string]interface{})
+	dummyQuery["_id"] = "12345"
+	read.SetQuery(dummyQuery)
+	read.SetLimit(5)
+	read.SetOffset(2)
+	var orderBy []map[string]interface{}
+	orderBy = append(orderBy, map[string]interface{}{"name": "ASC"})
+	read.SetOrderBy(orderBy)
+
+	data, err := read.ToJSON()
+	assert.NoError(t, err)
+	assert.Equal(t, "{\"type\":\"READ\",\"schema\":\"sample_schema\",\"as\":\"sample_schema\",\"fields\":[\"name\",\"age\"],\"query\":{\"_id\":\"12345\"},\"filters\":{\"limit\":5,\"offset\":2,\"order_by\":[{\"name\":\"ASC\"}]}}", string(data))
 }
