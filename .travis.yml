@@ -4,7 +4,6 @@ go:
 
 env:
   - GO111MODULE=on
-  - CODECOV_TOKEN="3594d1ef-eeac-4ba0-ad12-5d56bbabe918"
 
 install: true
 
@@ -23,4 +22,5 @@ script:
   - gocyclo -over 19 $GO_FILES
   
 after_success:
+  - export CODECOV_TOKEN="3594d1ef-eeac-4ba0-ad12-5d56bbabe918"
   - bash <(curl -s https://codecov.io/bash)
