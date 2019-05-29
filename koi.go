@@ -68,6 +68,7 @@ func (c *client) Exec() ([]byte, error) {
 
 	authorizationToken := fmt.Sprintf("Bearer %s", c.APIKey)
 	req.Header.Set("Authorization", authorizationToken)
+	req.Header.Set("Content-Type", "application/json")
 
 	client := http.DefaultClient
 	resp, err := client.Do(req)
