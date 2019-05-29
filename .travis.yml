@@ -13,9 +13,9 @@ notifications:
 
 before_script:
   - go get -v
-  - go get -u -v github.com/golang/lint/golint
-  - go get -u -v honnef.co/go/tools/cmd/megacheck
-  - go get -u -v github.com/fzipp/gocyclo
+  - go get -v github.com/golang/lint/golint
+  - go get -v honnef.co/go/tools/cmd/megacheck
+  - go get -v github.com/fzipp/gocyclo
 
 script:
   - test -z $(gofmt -s -l $GO_FILES)
