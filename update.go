@@ -31,39 +31,39 @@ func NewUpdate() IUpdate {
 	return &update{}
 }
 
-func (c *update) SetSchema(schema string) IUpdate {
-	c.Schema = schema
-	return c
+func (u *update) SetSchema(schema string) IUpdate {
+	u.Schema = schema
+	return u
 }
 
-func (c *update) GetSchema() string {
-	return c.Schema
+func (u *update) GetSchema() string {
+	return u.Schema
 }
 
-func (c *update) SetQuery(query map[string]interface{}) IUpdate {
-	c.Query = query
-	return c
+func (u *update) SetQuery(query map[string]interface{}) IUpdate {
+	u.Query = query
+	return u
 }
 
-func (c *update) GetQuery() map[string]interface{} {
-	return c.Query
+func (u *update) GetQuery() map[string]interface{} {
+	return u.Query
 }
 
-func (c *update) SetValue(value map[string]interface{}) IUpdate {
-	c.Value = value
-	return c
+func (u *update) SetValue(value map[string]interface{}) IUpdate {
+	u.Value = value
+	return u
 }
 
-func (c *update) GetValue() map[string]interface{} {
-	return c.Value
+func (u *update) GetValue() map[string]interface{} {
+	return u.Value
 }
 
-func (c *update) ToJSON() ([]byte, error) {
+func (u *update) ToJSON() ([]byte, error) {
 	jsonSchema := &updateSchema{
-		Type:   "update",
-		Schema: c.GetSchema(),
-		Query:  c.GetQuery(),
-		Values: c.GetValue(),
+		Type:   "UPDATE",
+		Schema: u.GetSchema(),
+		Query:  u.GetQuery(),
+		Values: u.GetValue(),
 	}
 
 	return json.Marshal(jsonSchema)

@@ -34,5 +34,5 @@ func TestShouldReturnCorrectJSONSchemaForDelete(t *testing.T) {
 
 	data, err := delete.ToJSON()
 	assert.NoError(t, err)
-	assert.Equal(t, "{\"type\":\"delete\",\"schema\":\"sample_schema\",\"query\":{\"_id\":\"12345\"}}", string(data))
+	assert.Equal(t, "{\"type\":\"DELETE\",\"schema\":\"sample_schema\",\"query\":{\"_id\":\"12345\"}}", string(data))
 }

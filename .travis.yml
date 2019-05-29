@@ -1,0 +1,12 @@
+language: go
+go:
+  - release
+
+env:
+  - GO111MODULE=on
+
+before_script:
+  - go get -v
+
+script:
+  - go test -v -race -cover ./...

@@ -48,5 +48,5 @@ func TestShouldReturnCorrectJSONSchemaForUpdate(t *testing.T) {
 
 	data, err := update.ToJSON()
 	assert.NoError(t, err)
-	assert.Equal(t, "{\"type\":\"update\",\"schema\":\"sample_schema\",\"query\":{\"_id\":\"12345\"},\"values\":{\"name\":\"ais\"}}", string(data))
+	assert.Equal(t, "{\"type\":\"UPDATE\",\"schema\":\"sample_schema\",\"query\":{\"_id\":\"12345\"},\"values\":{\"name\":\"ais\"}}", string(data))
 }

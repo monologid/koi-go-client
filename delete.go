@@ -27,29 +27,29 @@ func NewDelete() IDelete {
 	return &delete{}
 }
 
-func (c *delete) SetSchema(schema string) IDelete {
-	c.Schema = schema
-	return c
+func (d *delete) SetSchema(schema string) IDelete {
+	d.Schema = schema
+	return d
 }
 
-func (c *delete) GetSchema() string {
-	return c.Schema
+func (d *delete) GetSchema() string {
+	return d.Schema
 }
 
-func (c *delete) SetQuery(query map[string]interface{}) IDelete {
-	c.Query = query
-	return c
+func (d *delete) SetQuery(query map[string]interface{}) IDelete {
+	d.Query = query
+	return d
 }
 
-func (c *delete) GetQuery() map[string]interface{} {
-	return c.Query
+func (d *delete) GetQuery() map[string]interface{} {
+	return d.Query
 }
 
-func (c *delete) ToJSON() ([]byte, error) {
+func (d *delete) ToJSON() ([]byte, error) {
 	jsonSchema := &deleteSchema{
-		Type:   "delete",
-		Schema: c.GetSchema(),
-		Query:  c.GetQuery(),
+		Type:   "DELETE",
+		Schema: d.GetSchema(),
+		Query:  d.GetQuery(),
 	}
 
 	return json.Marshal(jsonSchema)

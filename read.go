@@ -52,91 +52,91 @@ func NewRead() IRead {
 	return &read{}
 }
 
-func (c *read) SetSchema(schema string) IRead {
-	c.Schema = schema
-	return c
+func (r *read) SetSchema(schema string) IRead {
+	r.Schema = schema
+	return r
 }
 
-func (c *read) GetSchema() string {
-	return c.Schema
+func (r *read) GetSchema() string {
+	return r.Schema
 }
 
-func (c *read) SetAs(resultAs string) IRead {
-	c.As = resultAs
-	return c
+func (r *read) SetAs(resultAs string) IRead {
+	r.As = resultAs
+	return r
 }
 
-func (c *read) GetAs() string {
-	return c.As
+func (r *read) GetAs() string {
+	return r.As
 }
 
-func (c *read) SetField(fields []string) IRead {
-	c.Field = fields
-	return c
+func (r *read) SetField(fields []string) IRead {
+	r.Field = fields
+	return r
 }
 
-func (c *read) GetField() []string {
-	return c.Field
+func (r *read) GetField() []string {
+	return r.Field
 }
 
-func (c *read) SetQuery(query map[string]interface{}) IRead {
-	c.Query = query
-	return c
+func (r *read) SetQuery(query map[string]interface{}) IRead {
+	r.Query = query
+	return r
 }
 
-func (c *read) GetQuery() map[string]interface{} {
-	return c.Query
+func (r *read) GetQuery() map[string]interface{} {
+	return r.Query
 }
 
-func (c *read) SetLimit(limit int64) IRead {
-	c.Limit = limit
-	return c
+func (r *read) SetLimit(limit int64) IRead {
+	r.Limit = limit
+	return r
 }
 
-func (c *read) GetLimit() int64 {
-	return c.Limit
+func (r *read) GetLimit() int64 {
+	return r.Limit
 }
 
-func (c *read) SetOffset(offset int64) IRead {
-	c.Offset = offset
-	return c
+func (r *read) SetOffset(offset int64) IRead {
+	r.Offset = offset
+	return r
 }
 
-func (c *read) GetOffset() int64 {
-	return c.Offset
+func (r *read) GetOffset() int64 {
+	return r.Offset
 }
 
-func (c *read) SetOrderBy(orderBy []map[string]interface{}) IRead {
-	c.OrderBy = orderBy
-	return c
+func (r *read) SetOrderBy(orderBy []map[string]interface{}) IRead {
+	r.OrderBy = orderBy
+	return r
 }
 
-func (c *read) GetOrderBy() []map[string]interface{} {
-	return c.OrderBy
+func (r *read) GetOrderBy() []map[string]interface{} {
+	return r.OrderBy
 }
 
-func (c *read) ToJSON() ([]byte, error) {
+func (r *read) ToJSON() ([]byte, error) {
 	jsonSchema := &readSchema{
 		Type:   "READ",
-		Schema: c.GetSchema(),
-		As:     c.GetAs(),
-		Fields: c.GetField(),
-		Query:  c.GetQuery(),
+		Schema: r.GetSchema(),
+		As:     r.GetAs(),
+		Fields: r.GetField(),
+		Query:  r.GetQuery(),
 	}
 
 	filter := &filters{}
-	if c.GetLimit() > 0 {
-		filter.Limit = c.GetLimit()
+	if r.GetLimit() > 0 {
+		filter.Limit = r.GetLimit()
 	} else {
 		filter.Limit = 10
 	}
 
-	if c.GetOffset() > 0 {
-		filter.Offset = c.GetOffset()
+	if r.GetOffset() > 0 {
+		filter.Offset = r.GetOffset()
 	}
 
-	if len(c.GetOrderBy()) > 0 {
-		filter.OrderBy = c.GetOrderBy()
+	if len(r.GetOrderBy()) > 0 {
+		filter.OrderBy = r.GetOrderBy()
 	}
 
 	jsonSchema.Filters = filter
