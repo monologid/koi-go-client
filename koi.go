@@ -75,6 +75,7 @@ func (c *client) Exec() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer resp.Body.Close()
 
 	return ioutil.ReadAll(resp.Body)
 }

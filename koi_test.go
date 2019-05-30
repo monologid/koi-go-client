@@ -128,3 +128,14 @@ func TestShouldReturnErrorIfTypeIsInvalid(t *testing.T) {
 
 	assert.Error(t, err)
 }
+
+func TestShouldReturnErrorIfAPIURLIsNotValid(t *testing.T) {
+	query := koiclient.NewDelete()
+	query.SetSchema("profile")
+	query.SetQuery(map[string]interface{}{"_id": "12345"})
+
+	client := koiclient.New("dummy-api-key")
+	_, err := client.SetAPIUrl("-").SetParams(query).Exec()
+
+	assert.Error(t, err)
+}
