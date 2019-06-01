@@ -6,51 +6,40 @@ import (
 
 // IResult represents interface for result
 type IResult interface {
-	GetStatus() (string, error)
-	GetData() (map[string]interface{}, error)
-	GetDataAsList() ([]interface{}, error)
+	Status() string
+	Data() interface{}
+	DataAsList() []interface{}
 }
 
 type result struct {
-	Resp []byte
+	Body map[string]interface{}
 }
 
 // NewResult initiates result object
-func NewResult(resp []byte) IResult {
+func NewResult(resp []byte) (IResult, error) {
+	tempResult := make(map[string]interface{})
+	err := json.Unmarshal(resp, &tempResult)
+	if err != nil {
+		return nil, err
+	}
+
 	return &result{
-		Resp: resp,
-	}
+		Body: tempResult,
+	}, nil
 }
 
-func (r *result) GetStatus() (string, error) {
-	tempResult := make(map[string]interface{})
-
-	err := json.Unmarshal(r.Resp, &tempResult)
-	if err != nil {
-		return "error", err
-	}
-
-	return tempResult["status"].(string), nil
+func (r *result) Status() string {
+	return r.Body["status"].(string)
 }
 
-func (r *result) GetData() (map[string]interface{}, error) {
-	tempResult := make(map[string]interface{})
-
-	err := json.Unmarshal(r.Resp, &tempResult)
-	if err != nil {
-		return nil, err
-	}
-
-	return tempResult["data"].(map[string]interface{}), nil
+func (r *result) Data() interface{} {
+	return r.Body["data"].(interface{})
 }
 
-func (r *result) GetDataAsList() ([]interface{}, error) {
-	tempResult := make(map[string]interface{})
-
-	err := json.Unmarshal(r.Resp, &tempResult)
-	if err != nil {
-		return nil, err
+func (r *result) DataAsList() []interface{} {
+	res, ok := r.Body["data"].([]interface{})
+	if !ok {
+		return nil
 	}
-
-	return tempResult["data"].([]interface{}), nil
+	return res
 }

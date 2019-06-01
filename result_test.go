@@ -7,60 +7,49 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestShouldReturnCorrectStatus(t *testing.T) {
-	response := `{"status": "success", "data": {}}`
-	result := koiclient.NewResult([]byte(response))
-
-	status, err := result.GetStatus()
-
-	assert.NoError(t, err)
-	assert.Equal(t, "success", status)
-}
-
-func TestShouldReturnErrorWhenJSONIsNotValidForStatus(t *testing.T) {
+func TestShouldReturnErrorIfResponseIsBroken(t *testing.T) {
 	response := `{"status": "success", "data": {}`
-	result := koiclient.NewResult([]byte(response))
-
-	status, err := result.GetStatus()
+	_, err := koiclient.NewResult([]byte(response))
 
 	assert.Error(t, err)
-	assert.Equal(t, "error", status)
+}
+
+func TestShouldReturnCorrectStatus(t *testing.T) {
+	response := `{"status": "success", "data": {}}`
+	result, err := koiclient.NewResult([]byte(response))
+
+	assert.NoError(t, err)
+	assert.Equal(t, "success", result.Status())
+}
+
+func TestShouldReturnCorrectEmptyData(t *testing.T) {
+	response := `{"status": "success", "data": {}}`
+	result, err := koiclient.NewResult([]byte(response))
+
+	assert.NoError(t, err)
+	assert.Equal(t, map[string]interface{}{}, result.Data())
 }
 
 func TestShouldReturnCorrectData(t *testing.T) {
 	response := `{"status": "success", "data": {"name":"monolog"}}`
-	result := koiclient.NewResult([]byte(response))
+	result, err := koiclient.NewResult([]byte(response))
 
-	status, err := result.GetStatus()
 	assert.NoError(t, err)
-	assert.Equal(t, "success", status)
-
-	data, err := result.GetData()
-	assert.NoError(t, err)
-	assert.Equal(t, "monolog", data["name"])
-}
-
-func TestShouldReturnErrorWhenJSONIsNotValidForData(t *testing.T) {
-	response := `{"status": "success", "data": {"name":"monolog"}`
-	result := koiclient.NewResult([]byte(response))
-
-	_, err := result.GetData()
-	assert.Error(t, err)
+	assert.Equal(t, map[string]interface{}{"name": "monolog"}, result.Data())
 }
 
 func TestShouldReturnCorrectDataAsList(t *testing.T) {
 	response := `{"status":"success","data":[{"_id":"2c3e6b70-8427-11e9-ac2c-a9ad4a2ad58d","account_id":"12345","app_secret_key":"7b50b4a9-08a4-4fea-8ab4-92a3da76186f","description":"test descruiption","endpoint":"/api/v1/sample","filename":"test.v2.so","method":"GET","module_name":"test","name":"test"}]}`
-	result := koiclient.NewResult([]byte(response))
+	result, err := koiclient.NewResult([]byte(response))
 
-	data, err := result.GetDataAsList()
 	assert.NoError(t, err)
-	assert.Equal(t, 1, len(data))
+	assert.Equal(t, 1, len(result.DataAsList()))
 }
 
-func TestShouldReturnErrorOnGetDataAsList(t *testing.T) {
-	response := `{"status":"success","data":[{"_id":"2c3e6b70-8427-11e9-ac2c-a9ad4a2ad58d","account_id":"12345","app_secret_key":"7b50b4a9-08a4-4fea-8ab4-92a3da76186f","description":"test descruiption","endpoint":"/api/v1/sample","filename":"test.v2.so","method":"GET","module_name":"test","name":"test"}}`
-	result := koiclient.NewResult([]byte(response))
+func TestShouldReturnZeroIfDataIsNotListButUseDataAsList(t *testing.T) {
+	response := `{"status":"success","data":{}}`
+	result, err := koiclient.NewResult([]byte(response))
 
-	_, err := result.GetDataAsList()
-	assert.Error(t, err)
+	assert.NoError(t, err)
+	assert.Equal(t, 0, len(result.DataAsList()))
 }
