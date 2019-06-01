@@ -1,11 +1,14 @@
 package koiclient
 
-import "encoding/json"
+import (
+	"encoding/json"
+)
 
 // IResult represents interface for result
 type IResult interface {
 	GetStatus() (string, error)
 	GetData() (map[string]interface{}, error)
+	GetDataAsList() ([]interface{}, error)
 }
 
 type result struct {
@@ -35,8 +38,19 @@ func (r *result) GetData() (map[string]interface{}, error) {
 
 	err := json.Unmarshal(r.Resp, &tempResult)
 	if err != nil {
-		return tempResult, err
+		return nil, err
 	}
 
 	return tempResult["data"].(map[string]interface{}), nil
+}
+
+func (r *result) GetDataAsList() ([]interface{}, error) {
+	tempResult := make(map[string]interface{})
+
+	err := json.Unmarshal(r.Resp, &tempResult)
+	if err != nil {
+		return nil, err
+	}
+
+	return tempResult["data"].([]interface{}), nil
 }
